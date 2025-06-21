@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice History - Aluminum Hardware</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SheetJS CDN for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Global styles -->
+    <link rel="stylesheet" href="styles/global.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="styles/history.css">
+</head>
+<body>
+    <header>
+        <h1>Aluminum Hardware Invoice Manager</h1>
+         <nav class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+            <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+            <a href="history.html" class="nav-link active"><i class="fas fa-history"></i> History</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button id="mobile-menu-button" aria-label="Open navigation menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+        <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+        <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+        <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+        <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content-container">
+            <h2 class="section-title">Invoice History</h2>
+
+            <!-- Message Box for User Feedback -->
+            <div id="message-box" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Info!</strong>
+                <span class="block sm:inline" id="message-text"></span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button type="button" id="export-invoices-btn" class="btn btn-primary w-full sm:w-auto">
+                        <i class="fas fa-file-excel"></i> Export All Invoices (Excel)
+                    </button>
+                    <button type="button" id="clear-all-invoices-btn" class="btn btn-red w-full sm:w-auto">
+                        <i class="fas fa-trash-alt"></i> Clear All Invoices
+                    </button>
+                </div>
+                <div class="relative w-full sm:w-auto">
+                    <input type="text" id="invoice-search-input" placeholder="Search by Invoice ID or Customer Name..." class="form-group-input pl-10 w-full sm:min-w-[250px]">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <button type="button" id="invoice-search-clear" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg shadow-md mb-8">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">Invoice ID</th>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer Name</th>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total Items</th>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Grand Total (PKR)</th>
+                            <th class="py-3 px-4 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th> <!-- New: Status Header -->
+                            <th class="py-3 px-4 bg-gray-50 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoice-history-table-body" class="divide-y divide-gray-200">
+                        <!-- Invoice rows will be dynamically loaded here by JS -->
+                        <tr>
+                            <td colspan="7" class="text-center text-gray-500 py-4">No invoices to display.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; <span id="current-year"></span> Aluminum Hardware Store. All rights reserved.
+    </footer>
+
+    <!-- Invoice View Modal -->
+    <div id="view-invoice-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="invoice-details-title">
+        <div class="modal-content">
+            <div id="invoice-print-area-single">
+                <!-- Invoice content will be dynamically loaded here by JS -->
+                <p>Loading invoice...</p>
+            </div>
+            <div class="flex justify-end gap-4 mt-6 no-print">
+                <button type="button" id="modal-print-invoice-btn" class="btn btn-primary" aria-label="Print Invoice">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button type="button" id="close-invoice-modal-btn" class="btn btn-gray" aria-label="Close Invoice Modal">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (add role and aria-modal) -->
+    <div id="confirmation-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmation-message">
+        <div class="modal-content text-center">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Confirm Action</h3>
+            <p id="confirmation-message" class="mb-6 text-gray-700"></p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button type="button" id="confirm-yes-btn" class="btn btn-green flex-1" aria-label="Confirm Yes">Yes</button>
+                <button type="button" id="confirm-no-btn" class="btn btn-red flex-1" aria-label="Confirm No">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Utility Scripts -->
+    <script type="module" src="scripts/utils.js"></script>
+    <script type="module" src="scripts/data.js"></script>
+    <!-- Page-specific Script -->
+    <script type="module" src="scripts/history.js"></script>
+</body>
+</html>

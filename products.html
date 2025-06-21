@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management - Aluminum Hardware</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SheetJS CDN for Excel import/export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Global styles -->
+    <link rel="stylesheet" href="styles/global.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="styles/products.css">
+    
+</head>
+<body>
+    <header>
+        <h1>Aluminum Hardware Invoice Manager</h1>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+            <a href="products.html" class="nav-link active"><i class="fas fa-cubes"></i> Products</a>
+            <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button id="mobile-menu-button" aria-label="Open navigation menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+        <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+        <a href="products.html" class="nav-link active"><i class="fas fa-cubes"></i> Products</a>
+        <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+        <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content-container">
+            <h2 class="section-title">Product Management</h2>
+
+            <!-- Message Box for User Feedback -->
+            <div id="message-box" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Info!</strong>
+                <span class="block sm:inline" id="message-text"></span>
+            </div>
+
+            <!-- Tabs for Add/View Products -->
+            <div class="flex border-b border-gray-200 mb-6 no-print">
+                <button id="add-product-tab" class="py-3 px-6 text-center text-gray-600 font-medium border-b-2 border-transparent hover:border-blue-500 hover:text-blue-600 transition-all duration-300 active-tab-btn" aria-controls="add-product-content" role="tab" aria-selected="true">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Product
+                </button>
+                <button id="view-products-tab" class="py-3 px-6 text-center text-gray-600 font-medium border-b-2 border-transparent hover:border-blue-500 hover:text-blue-600 transition-all duration-300" aria-controls="view-products-content" role="tab" aria-selected="false">
+                    <i class="fas fa-eye mr-2"></i> View Products
+                </button>
+            </div>
+
+            <!-- Add Product Tab Content -->
+            <div id="add-product-content" class="tab-content active" role="tabpanel" aria-labelledby="add-product-tab">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Add New Product</h3>
+                <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="product-name" class="block text-gray-700 text-sm font-semibold mb-2">Product Name:</label>
+                        <input type="text" id="product-name" class="form-group-input" placeholder="e.g., D-10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-type" class="block text-gray-700 text-sm font-semibold mb-2">Product Type:</label>
+                        <select id="product-type" class="form-group-select" required>
+                            <option value="">-- Select Type --</option>
+                            <!-- Options populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-brand" class="block text-gray-700 text-sm font-semibold mb-2">Brand:</label>
+                        <input type="text" id="product-brand" class="form-group-input" placeholder="e.g., Blue Metal">
+                    </div>
+                    <div class="form-group">
+                        <label for="unit-type" class="block text-gray-700 text-sm font-semibold mb-2">Unit Type:</label>
+                        <input type="text" id="unit-type" class="form-group-input" placeholder="e.g., FT, KG, PCS">
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-gray-700">Prices by Category:</h4>
+                        <div id="price-inputs" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            <!-- Price inputs will be dynamically added here by JS -->
+                        </div>
+                    </div>
+                    <div class="form-group md:col-span-2">
+                        <label for="product-discount" class="block text-gray-700 text-sm font-semibold mb-2">Default Discount (%):</label>
+                        <input type="number" id="product-discount" class="form-group-input" min="0" max="100" value="0" placeholder="0">
+                    </div>
+                    <div class="md:col-span-2 flex flex-col sm:flex-row gap-4 mt-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Add Product
+                        </button>
+                        <button type="button" id="clear-add-form-btn" class="btn btn-gray">
+                            <i class="fas fa-eraser"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- View Products Tab Content -->
+            <div id="view-products-content" class="tab-content hidden" role="tabpanel" aria-labelledby="view-products-tab">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Current Products</h3>
+                <div class="flex flex-col sm:flex-row gap-4 mb-4 justify-between items-center no-print">
+                    <div class="flex gap-2">
+                        <input type="text" id="product-search" class="form-group-input w-full sm:w-auto" placeholder="Search by name, brand, type...">
+                        <button type="button" id="search-btn" class="btn btn-primary px-3 py-2"><i class="fas fa-search"></i></button>
+                        <button type="button" id="clear-search-btn" class="btn btn-gray px-3 py-2"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                         <select id="brand-filter" class="form-group-select">
+                            <option value="">All Brands</option>
+                            <!-- Brands populated by JS -->
+                        </select>
+                        <select id="type-filter" class="form-group-select">
+                            <option value="">All Types</option>
+                            <!-- Types populated by JS -->
+                        </select>
+                        <button type="button" id="export-products-btn" class="btn btn-blue-outline"><i class="fas fa-file-excel"></i> Export</button>
+                        <label for="import-products-file" class="btn btn-blue-outline cursor-pointer">
+                            <i class="fas fa-file-import"></i> Import
+                            <input type="file" id="import-products-file" accept=".xlsx, .xls" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table id="products-table" class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-4">ID</th>
+                                <th class="py-3 px-4">Name</th>
+                                <th class="py-3 px-4">Type</th>
+                                <th class="py-3 px-4">Brand</th>
+                                <th class="py-3 px-4">Unit</th>
+                                <th class="py-3 px-4">Dull</th>
+                                <th class="py-3 px-4">Chm</th>
+                                <th class="py-3 px-4">Brown</th>
+                                <th class="py-3 px-4">Multi</th>
+                                <th class="py-3 px-4">Wood</th>
+                                <th class="py-3 px-4">Discount (%)</th>
+                                <th class="py-3 px-4 no-print">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Product rows will be dynamically loaded here by JS -->
+                            <tr>
+                                <td colspan="12" class="text-center text-gray-500 py-4">No products available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; <span id="current-year"></span> Aluminum Hardware Store. All rights reserved. <br>
+        Developed by Your Company Name.
+    </footer>
+
+    <!-- Edit Product Modal -->
+    <div id="edit-product-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="edit-product-title">
+        <div class="modal-content">
+            <h3 id="edit-product-title" class="text-2xl font-bold mb-6 text-gray-800">Edit Product</h3>
+            <form id="edit-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="edit-product-id">
+                <div class="form-group">
+                    <label for="edit-product-name" class="block text-gray-700 text-sm font-semibold mb-2">Product Name:</label>
+                    <input type="text" id="edit-product-name" class="form-group-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-type" class="block text-gray-700 text-sm font-semibold mb-2">Product Type:</label>
+                    <select id="edit-product-type" class="form-group-select" required>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-product-brand" class="block text-gray-700 text-sm font-semibold mb-2">Brand:</label>
+                    <input type="text" id="edit-product-brand" class="form-group-input">
+                </div>
+                <div class="form-group">
+                    <label for="edit-unit-type" class="block text-gray-700 text-sm font-semibold mb-2">Unit Type:</label>
+                    <input type="text" id="edit-unit-type" class="form-group-input">
+                </div>
+                <div class="md:col-span-2">
+                    <h4 class="text-lg font-semibold mt-4 mb-2 text-gray-700">Prices by Category:</h4>
+                    <div id="edit-price-inputs" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <!-- Price inputs will be dynamically added here by JS -->
+                    </div>
+                </div>
+                <div class="form-group md:col-span-2">
+                    <label for="edit-product-discount" class="block text-gray-700 text-sm font-semibold mb-2">Default Discount (%):</label>
+                    <input type="number" id="edit-product-discount" class="form-group-input" min="0" max="100" value="0" placeholder="0">
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+                    <button type="submit" class="btn btn-primary w-full md:w-auto">Save Changes</button>
+                    <button type="button" id="cancel-edit-btn" class="btn btn-red w-full md:w-auto">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (add role and aria-modal) -->
+    <div id="confirmation-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmation-message">
+        <div class="modal-content text-center">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Confirm Action</h3>
+            <p id="confirmation-message" class="mb-6 text-gray-700"></p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button type="button" id="confirm-yes-btn" class="btn btn-green flex-1" aria-label="Confirm Yes">Yes</button>
+                <button type="button" id="confirm-no-btn" class="btn btn-red flex-1" aria-label="Confirm No">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Utility Scripts -->
+    <script type="module" src="scripts/utils.js"></script>
+    <script type="module" src="scripts/data.js"></script>
+    <!-- Page-specific Script -->
+    <script type="module" src="scripts/products.js"></script>
+</body>
+</html>

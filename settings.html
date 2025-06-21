@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Aluminum Hardware</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Global styles -->
+    <link rel="stylesheet" href="styles/global.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="styles/settings.css">
+</head>
+<body>
+    <header>
+        <h1>Aluminum Hardware Invoice Manager</h1>
+         <nav class="nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+            <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+            <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="settings.html" class="nav-link active"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button id="mobile-menu-button" aria-label="Open navigation menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+        <a href="index.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Order</a>
+        <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+        <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+        <a href="settings.html" class="nav-link active"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content-container">
+            <h2 class="section-title">Application Settings</h2>
+
+            <!-- Message Box for User Feedback -->
+            <div id="message-box" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Info!</strong>
+                <span class="block sm:inline" id="message-text"></span>
+            </div>
+
+            <form id="settings-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <!-- Company Details Section -->
+                <div class="md:col-span-1 border rounded-lg p-6 bg-gray-50">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Company Details</h3>
+                    <div class="form-group mb-4">
+                        <label for="shop-name" class="block text-gray-700 text-sm font-semibold mb-2">Shop/Company Name:</label>
+                        <input type="text" id="shop-name" class="form-group-input" placeholder="e.g., Aluminum Hardware Store">
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="shop-phone1" class="block text-gray-700 text-sm font-semibold mb-2">Phone Number 1:</label>
+                        <input type="tel" id="shop-phone1" class="form-group-input" placeholder="e.g., 0312-1234567">
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="shop-phone2" class="block text-gray-700 text-sm font-semibold mb-2">Phone Number 2 (Optional):</label>
+                        <input type="tel" id="shop-phone2" class="form-group-input" placeholder="e.g., 0300-7654321">
+                    </div>
+                     <div class="form-group mb-4">
+                        <label for="shop-address" class="block text-gray-700 text-sm font-semibold mb-2">Address:</label>
+                        <textarea id="shop-address" class="form-group-input" rows="3" placeholder="e.g., 123 Main St, City, Country"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="shop-email" class="block text-gray-700 text-sm font-semibold mb-2">Email / Website:</label>
+                        <input type="text" id="shop-email" class="form-group-input" placeholder="e.g., info@example.com | www.example.com">
+                    </div>
+                </div>
+
+                <!-- Bank Details Section -->
+                <div class="md:col-span-1 border rounded-lg p-6 bg-gray-50">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Bank Details</h3>
+                    <div class="form-group mb-4">
+                        <label for="bank-name" class="block text-gray-700 text-sm font-semibold mb-2">Bank Name:</label>
+                        <input type="text" id="bank-name" class="form-group-input" placeholder="e.g., Bank Alfalah">
+                    </div>
+                    <div class="form-group mb-4">
+                        <label for="account-title" class="block text-gray-700 text-sm font-semibold mb-2">Account Title:</label>
+                        <input type="text" id="account-title" class="form-group-input" placeholder="e.g., Aluminum Hardware Solutions">
+                    </div>
+                    <div class="form-group">
+                        <label for="account-number" class="block text-gray-700 text-sm font-semibold mb-2">Account Number / IBAN:</label>
+                        <input type="text" id="account-number" class="form-group-input" placeholder="e.g., PKXX XXXX XXXX XXXX XXXX XXXX">
+                    </div>
+                </div>
+
+                <!-- Invoice Settings Section -->
+                <div class="md:col-span-2 border rounded-lg p-6 bg-gray-50">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Invoice Settings</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="sales-tax-rate" class="block text-gray-700 text-sm font-semibold mb-2">Sales Tax Rate (%):</label>
+                            <input type="number" id="sales-tax-rate" class="form-group-input" min="0" max="100" step="0.1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-font-family" class="block text-gray-700 text-sm font-semibold mb-2">Invoice Font Family:</label>
+                            <input type="text" id="invoice-font-family" class="form-group-input" placeholder="e.g., Inter, sans-serif">
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-font-size" class="block text-gray-700 text-sm font-semibold mb-2">Invoice Font Size (px):</label>
+                            <input type="number" id="invoice-font-size" class="form-group-input" min="8" max="24" step="1" value="14">
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-paper-size" class="block text-gray-700 text-sm font-semibold mb-2">Invoice Paper Size:</label>
+                            <select id="invoice-paper-size" class="form-group-select">
+                                <option value="A4">A4</option>
+                                <option value="Letter">Letter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-logo-url" class="block text-gray-700 text-sm font-semibold mb-2">Invoice Logo URL:</label>
+                            <input type="url" id="invoice-logo-url" class="form-group-input" placeholder="e.g., https://example.com/logo.png">
+                            <div class="mt-2" id="logo-preview-container">
+                                <span class="text-gray-600 text-sm">Logo Preview:</span>
+                                <img id="logo-preview" src="" alt="Logo Preview" class="max-h-24 max-w-full object-contain border border-gray-200 rounded-md mt-1 hidden" onerror="this.classList.add('hidden');">
+                            </div>
+                        </div>
+                        <div class="form-group flex flex-col justify-end">
+                            <label class="inline-flex items-center mt-2">
+                                <input type="checkbox" id="show-logo" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="ml-2 text-gray-700">Show Logo on Invoice</span>
+                            </label>
+                            <label class="inline-flex items-center mt-2">
+                                <input type="checkbox" id="show-address" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="ml-2 text-gray-700">Show Address on Invoice</span>
+                            </label>
+                            <label class="inline-flex items-center mt-2">
+                                <input type="checkbox" id="show-bank" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="ml-2 text-gray-700">Show Bank Details on Invoice</span>
+                            </label>
+                             <label class="inline-flex items-center mt-2">
+                                <input type="checkbox" id="dark-mode-toggle" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                                <span class="ml-2 text-gray-700">Enable Dark Mode</span>
+                            </label>
+                        </div>
+                        <div class="form-group md:col-span-2">
+                            <label for="invoice-footer-text" class="block text-gray-700 text-sm font-semibold mb-2">Invoice Footer Text:</label>
+                            <textarea id="invoice-footer-text" class="form-group-input" rows="2" placeholder="e.g., Thank you for your business!"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="default-discount" class="block text-gray-700 text-sm font-semibold mb-2">Default Global Discount (%):</label>
+                            <input type="number" id="default-discount" class="form-group-input" min="0" max="100" step="0.1" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="invoice-columns" class="block text-gray-700 text-sm font-semibold mb-2">Number of Invoice Columns:</label>
+                            <select id="invoice-columns" class="form-group-select">
+                                <option value="1">1 Column (Default)</option>
+                                <option value="2">2 Columns</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end mt-8 md:col-span-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; <span id="current-year"></span> Aluminum Hardware Store. All rights reserved. <br>
+        Developed by Your Company Name.
+    </footer>
+
+    <!-- Confirmation Modal (add role and aria-modal) -->
+    <div id="confirmation-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmation-message">
+        <div class="modal-content text-center">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Confirm Action</h3>
+            <p id="confirmation-message" class="mb-6 text-gray-700"></p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button type="button" id="confirm-yes-btn" class="btn btn-green flex-1" aria-label="Confirm Yes">Yes</button>
+                <button type="button" id="confirm-no-btn" class="btn btn-red flex-1" aria-label="Confirm No">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Utility Scripts -->
+    <script type="module" src="scripts/utils.js"></script>
+    <script type="module" src="scripts/data.js"></script>
+    <!-- Page-specific Script -->
+    <script type="module" src="scripts/settings.js"></script>
+</body>
+</html>

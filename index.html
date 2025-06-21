@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - Aluminum Hardware</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Global styles -->
+    <link rel="stylesheet" href="styles/global.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+    <header>
+        <h1>Aluminum Hardware Invoice Manager</h1>
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link active"><i class="fas fa-shopping-cart"></i> Order</a>
+            <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+            <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button id="mobile-menu-button" aria-label="Open navigation menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+        <a href="index.html" class="nav-link active"><i class="fas fa-shopping-cart"></i> Order</a>
+        <a href="products.html" class="nav-link"><i class="fas fa-cubes"></i> Products</a>
+        <a href="history.html" class="nav-link"><i class="fas fa-history"></i> History</a>
+        <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="content-container">
+            <h2 class="section-title">Create New Order</h2>
+
+            <!-- Message Box for User Feedback -->
+            <div id="message-box" class="hidden bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Info!</strong>
+                <span class="block sm:inline" id="message-text"></span>
+            </div>
+
+            <form id="order-form" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="form-group">
+                    <label for="customer-name" class="block text-gray-700 text-sm font-semibold mb-2">Customer Name:</label>
+                    <input type="text" id="customer-name" class="form-group-input" placeholder="e.g., John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="order-date" class="block text-gray-700 text-sm font-semibold mb-2">Order Date:</label>
+                    <input type="date" id="order-date" class="form-group-input" required>
+                </div>
+                <!-- Added Customer Contact Input -->
+                <div class="form-group">
+                    <label for="customer-contact" class="block text-gray-700 text-sm font-semibold mb-2">Customer Contact:</label>
+                    <input type="text" id="customer-contact" class="form-group-input" placeholder="e.g., 03XX-XXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label for="customer-address" class="block text-gray-700 text-sm font-semibold mb-2">Customer Address:</label>
+                    <textarea id="customer-address" class="form-group-input" rows="2" placeholder="e.g., 123 Main St, City, Country"></textarea>
+                </div>
+
+                <h3 class="md:col-span-2 text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Order Items</h3>
+                
+                <!-- Product Search, Brand and Type Filters -->
+                <div class="form-group">
+                    <label for="order-product-search" class="block text-gray-700 text-sm font-semibold mb-2">Search Product:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="order-product-search" class="form-group-input flex-grow" placeholder="Search by name...">
+                        <button type="button" id="order-product-search-btn" class="btn btn-primary px-3 py-2"><i class="fas fa-search"></i></button>
+                        <button type="button" id="order-product-search-clear" class="btn btn-gray px-3 py-2"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="order-brand-filter" class="block text-gray-700 text-sm font-semibold mb-2">Filter by Brand:</label>
+                    <select id="order-brand-filter" class="form-group-select">
+                        <option value="">All Brands</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="order-type-filter" class="block text-gray-700 text-sm font-semibold mb-2">Filter by Type:</label>
+                    <select id="order-type-filter" class="form-group-select">
+                        <option value="">All Types</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="order-product" class="block text-gray-700 text-sm font-semibold mb-2">Select Product:</label>
+                    <select id="order-product" class="form-group-select">
+                        <option value="">-- Select a Product --</option>
+                        <!-- Products will be dynamically loaded here by JS -->
+                    </select>
+                </div>
+                 <div class="form-group">
+                    <label for="item-brand" class="block text-gray-700 text-sm font-semibold mb-2">Brand (Selected Product):</label>
+                    <input type="text" id="item-brand" class="form-group-input bg-gray-100" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="item-color" class="block text-gray-700 text-sm font-semibold mb-2">Color (Selected Product):</label>
+                    <input type="text" id="item-color" class="form-group-input bg-gray-100" readonly>
+                </div>
+                <div class="form-group" id="order-length-group">
+                    <label for="order-length" class="block text-gray-700 text-sm font-semibold mb-2">Length:</label>
+                    <select id="order-length" class="form-group-select">
+                        <option value="">-- Select Length --</option>
+                        <option value="10">10 ft</option>
+                        <option value="12">12 ft</option>
+                        <option value="18">18 ft</option>
+                        <option value="20">20 ft</option>
+                        <option value="24">24 ft</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                 <div class="form-group hidden" id="order-length-other-group">
+                    <label for="order-length-other" class="block text-gray-700 text-sm font-semibold mb-2">Enter Custom Length (ft):</label>
+                    <input type="number" id="order-length-other" class="form-group-input" min="0.01" step="0.01" placeholder="e.g., 15.5">
+                </div>
+                 <div class="form-group">
+                    <label for="order-nos" class="block text-gray-700 text-sm font-semibold mb-2">No.s (Pieces):</label>
+                    <input type="number" id="order-nos" class="form-group-input" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="order-cut-size" class="block text-gray-700 text-sm font-semibold mb-2">Cut Size (ft):</label>
+                    <input type="number" id="order-cut-size" class="form-group-input" min="0" step="0.01" value="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="item-unit-display" class="block text-gray-700 text-sm font-semibold mb-2">Unit:</label>
+                    <input type="text" id="item-unit-display" class="form-group-input bg-gray-100" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="order-price-category" class="block text-gray-700 text-sm font-semibold mb-2">Price Category:</label>
+                    <select id="order-price-category" class="form-group-select">
+                        <option value="">-- Select Price Category --</option>
+                        <!-- Price categories will be dynamically loaded here by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="order-unit-price" class="block text-gray-700 text-sm font-semibold mb-2">Rate (Unit Price):</label>
+                    <input type="number" id="order-unit-price" class="form-group-input bg-gray-100" readonly value="0.00">
+                </div>
+                 <div class="form-group">
+                    <label for="order-quantity" class="block text-gray-700 text-sm font-semibold mb-2">Quantity:</label>
+                    <input type="number" id="order-quantity" class="form-group-input" min="0" step="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="item-discount-percent" class="block text-gray-700 text-sm font-semibold mb-2">Item Discount (%):</label>
+                    <input type="number" id="item-discount-percent" class="form-group-input" min="0" max="100" step="0.1" value="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="total-item-gross-amount" class="block text-gray-700 text-sm font-semibold mb-2">Gross Amount:</label>
+                    <input type="text" id="total-item-gross-amount" class="form-group-input bg-gray-100" readonly value="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="total-item-discount-amount" class="block text-gray-700 text-sm font-semibold mb-2">Discount Amount:</label>
+                    <input type="text" id="total-item-discount-amount" class="form-group-input bg-gray-100" readonly value="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="total-item-net-amount" class="block text-gray-700 text-sm font-semibold mb-2">Net Amount:</label>
+                    <input type="text" id="total-item-net-amount" class="form-group-input bg-gray-100" readonly value="0.00">
+                </div>
+
+
+                <div class="md:col-span-2 flex flex-col sm:flex-row justify-center gap-4 mt-2">
+                    <button type="button" id="add-item-btn" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add Item
+                    </button>
+                    <button type="button" id="clear-item-fields-btn" class="btn btn-gray">
+                        <i class="fas fa-eraser"></i> Clear Item Fields
+                    </button>
+                </div>
+            </form>
+
+            <div class="overflow-x-auto mb-8">
+                <table id="order-items-table" class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Item</th>
+                            <th>Unit</th>
+                            <th>Color</th>
+                            <th>Rate</th>
+                            <th>Size</th>
+                            <th>Qty.</th>
+                            <th>Gross Amount</th>
+                            <th>% Discount</th>
+                            <th>Disc. Amt.</th>
+                            <th>Net Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Order items will be dynamically loaded here by JS -->
+                        <tr>
+                            <td colspan="12" class="text-center text-gray-500 py-4">No items added yet.</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-right font-semibold py-3 pr-4">Subtotal:</td>
+                            <td class="font-bold py-3" id="subtotal-display">0.00</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="text-right font-semibold py-3 pr-4">Total Feet:</td>
+                            <td class="font-bold py-3" id="total-feet-display">0.00</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                         <tr>
+                            <td colspan="9" class="text-right font-semibold py-3 pr-4">Global Discount (%):</td>
+                            <td class="font-bold py-3">
+                                <input type="number" id="invoice-global-discount-percent" class="form-group-input w-24 inline-block text-right" min="0" max="100" step="0.1" value="0.00">
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="text-right font-semibold py-3 pr-4">Sales Tax (<span id="sales-tax-rate-display">0</span>%):</td>
+                            <td class="font-bold py-3" id="sales-tax-display">0.00</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="bg-blue-100">
+                            <td colspan="9" class="text-right font-semibold py-3 pr-4 text-blue-800">Grand Total:</td>
+                            <td class="font-bold py-3 text-blue-700 text-xl" id="grand-total-display">0.00</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-end mt-6">
+                <button type="button" id="generate-invoice-btn" class="btn btn-green">
+                    <i class="fas fa-file-invoice"></i> Generate Invoice
+                </button>
+                <button type="button" id="print-current-order-btn" class="btn btn-blue-outline">
+                    <i class="fas fa-print"></i> Print Current Order
+                </button>
+                <button type="button" id="clear-order-btn" class="btn btn-red">
+                    <i class="fas fa-trash-alt"></i> Clear Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; <span id="current-year"></span> Aluminum Hardware Store. All rights reserved.
+    </footer>
+
+    <!-- Invoice Modal -->
+    <div id="view-invoice-modal" class="modal hidden">
+        <div class="modal-content">
+            <!-- Removed redundant "Invoice Details" heading from here -->
+            <div id="invoice-print-area">
+                <!-- Invoice content will be dynamically loaded here by JS for modal display -->
+                <p>Loading invoice...</p>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-end gap-4 mt-6 no-print">
+                <button type="button" id="modal-print-invoice-btn" class="btn btn-blue-outline">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button type="button" id="close-invoice-modal-btn" class="btn btn-gray">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal hidden">
+        <div class="modal-content text-center">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Confirm Action</h3>
+            <p id="confirmation-message" class="mb-6 text-gray-700"></p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button type="button" id="confirm-yes-btn" class="btn btn-green flex-1">Yes</button>
+                <button type="button" id="confirm-no-btn" class="btn btn-red flex-1">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Utility Scripts -->
+    <script type="module" src="scripts/utils.js"></script>
+    <script type="module" src="scripts/data.js"></script>
+    <!-- Page-specific Script -->
+    <script type="module" src="scripts/index.js"></script>
+</body>
+
+</html>
