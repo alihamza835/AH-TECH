@@ -1,0 +1,421 @@
+/* Page-specific styles for History page */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+        }
+        header {
+            width: 100%;
+            background-color: #1f2937;
+            color: #ffffff;
+            padding: 16px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            flex-shrink: 0;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-link:hover {
+            background-color: #374151;
+        }
+        .nav-link.active {
+            background-color: #2563eb; /* Blue 600 */
+            font-weight: 600;
+        }
+
+        /* Mobile Navigation */
+        #mobile-menu-button {
+            display: none; /* Hidden on desktop */
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .mobile-nav-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%); /* Start off-screen */
+        }
+        .mobile-nav-overlay.active {
+            transform: translateX(0); /* Slide in */
+            display: flex; /* Show overlay */
+        }
+        .mobile-nav-overlay .nav-link {
+            font-size: 1.5rem;
+            padding: 15px 30px;
+            width: 80%;
+            text-align: center;
+            background-color: #1f2937;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content Wrapper */
+        .main-wrapper {
+            flex-grow: 1; /* Allows content to take available space */
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .content-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #2563eb; /* Blue 600 */
+            border-radius: 2px;
+        }
+
+        /* Form Group (for search input) */
+        .form-group-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #374151;
+            background-color: #f9fafb;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+            outline: none;
+        }
+
+        /* Button Styling (Unified) - Copied from global.css for consistency */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between icon and text */
+            white-space: nowrap; /* Prevent text wrapping */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 44px; /* Ensure minimum touch target size */
+            min-width: 44px;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-primary { background-color: #2563eb; color: #ffffff; border: 1px solid #2563eb; }
+        .btn-primary:hover { background-color: #1d4ed8; border-color: #1d4ed8; }
+        .btn-blue-outline { background-color: transparent; color: #2563eb; border: 1px solid #2563eb; }
+        .btn-blue-outline:hover { background-color: #eff6ff; color: #1d4ed8; }
+        .btn-gray { background-color: #6b7280; color: #ffffff; border: 1px solid #6b7280; }
+        .btn-gray:hover { background-color: #4b5563; border-color: #4b5563; }
+        .btn-red { background-color: #ef4444; color: #ffffff; border: 1px solid #ef4444; }
+        .btn-red:hover { background-color: #dc2626; border-color: #dc2626; }
+        .btn-green { background-color: #22c55e; color: #ffffff; border: 1px solid #22c55e; }
+        .btn-green:hover { background-color: #16a34a; border-color: #16a34a; }
+        .btn-yellow { background-color: #f59e0b; color: #ffffff; border: 1px solid #f59e0b; }
+        .btn-yellow:hover { background-color: #d97706; border-color: #d97706; }
+        .btn-sm { padding: 6px 12px; font-size: 0.875rem; min-height: 36px; min-width: 36px; }
+
+
+        /* Table Styling */
+        .min-w-full {
+            min-width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden; /* Ensures rounded corners apply to content */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        table th, table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+        table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #4b5563;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        table tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        /* Align specific columns */
+        table th:nth-child(5), /* Grand Total */
+        table td:nth-child(5) {
+            text-align: right;
+        }
+        table th:last-child, /* Actions header */
+        table td:last-child { /* Actions column */
+            text-align: center;
+        }
+        /* Style for the new wrapper div inside the Actions column */
+        .history-actions-buttons {
+            display: flex;
+            flex-wrap: nowrap; /* Crucial: prevent buttons from wrapping */
+            gap: 5px; /* Small gap between buttons */
+            justify-content: center; /* Center buttons horizontally */
+            align-items: center; /* Center buttons vertically */
+            width: 100%; /* Ensure it takes full width of the cell */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+        /* Adjustments for the small buttons within the flex container */
+        .history-actions-buttons .btn-sm {
+            flex-shrink: 0; /* Prevent buttons from shrinking */
+            min-width: unset; /* Allow natural width */
+            width: auto; /* Allow width to be determined by content */
+            margin: 0; /* Remove any external margins */
+        }
+        /* Removed the specific icon styling as icon is removed from HTML */
+        /*
+        .history-actions-buttons .btn-sm i {
+            font-family: 'Font Awesome 6 Brands' !important;
+            font-weight: 400;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+        .history-actions-buttons .btn-sm .fab.fa-whatsapp {
+            font-family: 'Font Awesome 6 Brands' !important;
+            font-weight: 400;
+            text-decoration: none;
+        }
+        */
+
+
+        /* Message Box */
+        #message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            min-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            padding: 10px 20px;
+        }
+        #message-box strong {
+            margin-right: 5px;
+        }
+
+        /* Modals (Invoice View & Confirmation) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Print-specific styles for invoice content within modal */
+        @media print {
+            body > *:not(#view-invoice-modal) {
+                display: none !important;
+            }
+            #view-invoice-modal {
+                position: static;
+                visibility: visible !important;
+                background-color: transparent;
+                display: block;
+            }
+            #view-invoice-modal .modal-content {
+                box-shadow: none;
+                width: 100%;
+                max-width: none;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #invoice-print-area-single {
+                visibility: visible !important;
+                position: static;
+                padding: 20px;
+                box-shadow: none;
+                background-color: #ffffff;
+                font-size: 0.9em;
+            }
+        }
+        
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .nav-links {
+                display: none; /* Hide desktop nav */
+            }
+            #mobile-menu-button {
+                display: block; /* Show mobile menu button */
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .content-container {
+                padding: 15px;
+            }
+            /* Adjust button and search container for small screens */
+            .flex-col.sm:flex-row {
+                flex-direction: column; /* Ensure vertical stack on small screens */
+                align-items: stretch; /* Stretch items to full width */
+            }
+            .flex-col.sm:flex-row > div {
+                width: 100%; /* Make button group and search input full width */
+            }
+            .btn {
+                width: 100%; /* Full width buttons on small screens */
+                font-size: 0.95rem;
+                padding: 10px 15px;
+            }
+            .modal-content {
+                max-width: 95vw;
+                margin: 10px;
+            }
+            /* Table responsive adjustments */
+            .overflow-x-auto {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            }
+            table {
+                /* Increased min-width for table to ensure all columns fit when buttons are nowrap */
+                min-width: 800px; 
+            }
+            table th, table td {
+                padding: 8px 10px; /* Reduce padding for smaller screens */
+                font-size: 0.8rem; /* Smaller font for mobile tables */
+            }
+            /* Specific adjustments for action buttons on mobile */
+            table td:last-child { /* Target the last td directly */
+                padding: 5px; /* Keep padding consistent */
+                min-width: 300px; /* Ensure sufficient width for all buttons on one line */
+            }
+            .history-actions-buttons {
+                flex-direction: row; /* Ensure buttons stay in a row */
+                flex-wrap: nowrap; /* Explicitly prevent wrapping */
+                justify-content: center; /* Center the buttons */
+                gap: 5px; /* Consistent gap */
+            }
+            .history-actions-buttons .btn-sm {
+                width: auto; /* Allow natural width */
+                flex-shrink: 0; /* Prevent shrinking */
+                padding: 6px 8px; /* Slightly reduced padding for smaller buttons */
+                font-size: 0.75rem; /* Smaller font for compact buttons */
+                margin: 0; /* No extra margins */
+            }
+            /* Removed the specific icon styling as icon is removed from HTML */
+            /*
+            .history-actions-buttons .btn-sm i {
+                margin-right: 3px;
+            }
+            */
+
+            #message-box {
+                width: 90%;
+                min-width: unset;
+            }
+        }
+
+/* Footer styling (copied from global.css for consistency) */
+footer {
+    width: 100%;
+    background-color: #1f2937;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    margin-top: auto; /* Pushes footer to the bottom */
+    flex-shrink: 0; /* Prevents footer from shrinking */
+}

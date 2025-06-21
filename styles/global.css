@@ -1,0 +1,642 @@
+/* Global styles for Aluminum Hardware Invoice Manager */
+
+/* Base styling for the body */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Stacks header, main, footer */
+    justify-content: space-between; /* Pushes footer to the bottom */
+    align-items: center;
+    padding: 0; /* No padding on body, controlled by inner containers */
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+body.dark-mode header {
+    background-color: #2d3748;
+}
+body.dark-mode .nav-link:hover,
+body.dark-mode .nav-link.active {
+    background-color: #4a5568;
+}
+body.dark-mode .content-container,
+body.dark-mode .modal-content,
+body.dark-mode .bg-gray-50,
+body.dark-mode .bg-white {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+body.dark-mode .border,
+body.dark-mode .border-gray-200,
+body.dark-mode .divide-y,
+body.dark-mode .divide-gray-200 {
+    border-color: #4a5568 !important;
+}
+body.dark-mode .text-gray-700,
+body.dark-mode .text-gray-800,
+body.dark-mode .text-gray-900 {
+    color: #e2e8f0;
+}
+body.dark-mode .text-gray-600 {
+    color: #cbd5e0;
+}
+body.dark-mode .form-group-input,
+body.dark-mode .form-group-select,
+body.dark-mode .bg-gray-100 {
+    background-color: #4a5568;
+    color: #e2e8f0;
+    border-color: #6b7280;
+}
+body.dark-mode .form-group-input::placeholder {
+    color: #a0aec0;
+}
+body.dark-mode table thead th {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+body.dark-mode table tbody tr:nth-child(even) {
+    background-color: #2d3748;
+}
+body.dark-mode .btn-primary {
+    background-color: #6366f1; /* Indigo 500 */
+    color: #ffffff;
+}
+body.dark-mode .btn-primary:hover {
+    background-color: #4338ca; /* Indigo 600 */
+}
+body.dark-mode .btn-blue-outline {
+    border-color: #60a5fa; /* Blue 400 */
+    color: #60a5fa;
+}
+body.dark-mode .btn-blue-outline:hover {
+    background-color: #1e3a8a; /* Blue 900 */
+    color: #ffffff;
+}
+body.dark-mode .btn-gray {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+body.dark-mode .btn-gray:hover {
+    background-color: #6b7280;
+}
+body.dark-mode .btn-red {
+    background-color: #ef4444; /* Red 500 */
+    color: #ffffff;
+    border: 1px solid #ef4444;
+}
+body.dark-mode .btn-red:hover {
+    background-color: #dc2626; /* Red 600 */
+    border-color: #dc2626;
+}
+body.dark-mode .btn-green {
+    background-color: #22c55e; /* Green 500 */
+    color: #ffffff;
+    border: 1px solid #22c55e;
+}
+body.dark-mode .btn-green:hover {
+    background-color: #16a34a; /* Green 600 */
+    border-color: #16a34a;
+}
+body.dark-mode .btn-yellow {
+    background-color: #f59e0b; /* Yellow 500 */
+    color: #ffffff;
+    border: 1px solid #f59e0b;
+}
+body.dark-mode .btn-yellow:hover {
+    background-color: #d97706; /* Yellow 600 */
+    border-color: #d97706;
+}
+
+
+/* Header styling */
+header {
+    width: 100%;
+    background-color: #1f2937;
+    color: #ffffff;
+    padding: 16px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    flex-shrink: 0; /* Prevents header from shrinking */
+}
+header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px; /* Space between title and nav on desktop */
+}
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.nav-link:hover {
+    background-color: #374151;
+}
+.nav-link.active {
+    background-color: #2563eb; /* Blue 600 */
+    font-weight: 600;
+}
+
+/* Mobile Navigation */
+#mobile-menu-button {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 10px;
+}
+.mobile-nav-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%); /* Start off-screen */
+}
+.mobile-nav-overlay.active {
+    transform: translateX(0); /* Slide in */
+    display: flex; /* Show overlay */
+}
+.mobile-nav-overlay .nav-link {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    width: 80%;
+    text-align: center;
+    background-color: #1f2937;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Main Content Wrapper */
+.main-wrapper {
+    flex-grow: 1; /* Allows content to take available space */
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.content-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #2563eb; /* Blue 600 */
+    border-radius: 2px;
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+.form-group-input,
+.form-group-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #374151;
+    background-color: #f9fafb;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+.form-group-input:focus,
+.form-group-select:focus {
+    border-color: #2563eb; /* Blue 600 */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); /* Blue 600 with opacity */
+    outline: none;
+}
+.form-group-input[readonly] {
+    background-color: #e5e7eb;
+    cursor: not-allowed;
+}
+textarea.form-group-input {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Button Styling (Unified) */
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between icon and text */
+    white-space: nowrap; /* Prevent text wrapping */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 44px; /* Ensure minimum touch target size */
+    min-width: 44px;
+}
+
+.btn:hover {
+    transform: translateY(-1px); /* Slight lift effect */
+}
+.btn:active {
+    transform: translateY(0); /* Press down effect */
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #2563eb; /* Blue 600 */
+    color: #ffffff;
+    border: 1px solid #2563eb;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8; /* Blue 700 */
+    border-color: #1d4ed8;
+}
+
+.btn-blue-outline {
+    background-color: transparent;
+    color: #2563eb; /* Blue 600 */
+    border: 1px solid #2563eb;
+}
+.btn-blue-outline:hover {
+    background-color: #eff6ff; /* Blue 50 */
+    color: #1d4ed8; /* Blue 700 */
+}
+
+.btn-gray {
+    background-color: #6b7280; /* Gray 500 */
+    color: #ffffff;
+    border: 1px solid #6b7280;
+}
+.btn-gray:hover {
+    background-color: #4b5563; /* Gray 600 */
+    border-color: #4b5563;
+}
+
+.btn-red {
+    background-color: #ef4444; /* Red 500 */
+    color: #ffffff;
+    border: 1px solid #ef4444;
+}
+.btn-red:hover {
+    background-color: #dc2626; /* Red 600 */
+    border-color: #dc2626;
+}
+
+.btn-green {
+    background-color: #22c55e; /* Green 500 */
+    color: #ffffff;
+    border: 1px solid #22c55e;
+}
+.btn-green:hover {
+    background-color: #16a34a; /* Green 600 */
+    border-color: #16a34a;
+}
+
+.btn-yellow {
+    background-color: #f59e0b; /* Yellow 500 */
+    color: #ffffff;
+    border: 1px solid #f59e0b;
+}
+.btn-yellow:hover {
+    background-color: #d97706; /* Yellow 600 */
+    border-color: #d97706;
+}
+
+
+/* Small buttons for table actions */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem; /* text-sm */
+    min-height: 36px;
+    min-width: 36px;
+}
+
+
+/* Table Styling */
+.min-w-full {
+    min-width: 100%;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners apply to content */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+table th, table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #374151;
+}
+table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #4b5563;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+table tbody tr:hover {
+    background-color: #f3f4f6;
+}
+table tfoot td {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 2px solid #e5e7eb;
+}
+table tfoot tr:last-child td {
+    border-top: 2px solid #2563eb;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Specific styling for the totals row */
+table tfoot tr.bg-blue-100 td {
+    background-color: #e0f2fe; /* light blue */
+    color: #0c4a6e; /* dark blue text */
+    font-size: 1.1rem;
+}
+body.dark-mode table tfoot tr.bg-blue-100 td {
+    background-color: #1e3a8a; /* Darker blue */
+    color: #bfdbfe; /* Lighter text */
+}
+
+/* Message Box */
+#message-box {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    min-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-left: 5px solid;
+    padding: 10px 20px;
+}
+#message-box strong {
+    margin-right: 5px;
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Enable scrolling for modal content */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+    max-width: 900px;
+    width: 100%;
+    position: relative; /* For print area positioning */
+    max-height: 90vh; /* Limit modal height */
+    overflow-y: auto; /* Enable internal scrolling */
+}
+
+/* Utility for hiding elements for print */
+@media print {
+    /* Hide everything on the page when 'print-active' is on body, except the modal */
+    body.print-active > *:not(#view-invoice-modal) {
+        display: none !important;
+    }
+
+    /* Ensure the modal is visible and positioned correctly for printing */
+    body.print-active #view-invoice-modal {
+        position: static !important; /* Position static for print flow */
+        visibility: visible !important;
+        background-color: transparent !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important; /* Height adjusts to content */
+        padding: 0 !important;
+        margin: 0 auto !important; /* Center for printing */
+    }
+
+    /* Ensure modal content takes full width and no shadow for printing */
+    body.print-active #view-invoice-modal .modal-content {
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-height: none !important; /* Allow content to expand */
+        overflow-y: visible !important; /* No internal scrollbar in print */
+    }
+
+    /* --- Specific print adjustments for invoice content --- */
+    body.print-active #invoice-print-area .company-header {
+        padding: 5px !important; /* Even smaller padding */
+        margin-bottom: 5px !important; /* Reduced margin */
+    }
+    body.print-active #invoice-print-area .company-header img {
+        max-height: 35px !important; /* Smaller logo */
+        margin-bottom: 3px !important; /* Reduced margin */
+    }
+    body.print-active #invoice-print-area .company-header h1 {
+        font-size: 1.3rem !important; /* Smaller company name */
+        margin-bottom: 2px !important; /* Reduced margin */
+    }
+    body.print-active #invoice-print-area .company-header p {
+        font-size: 0.65rem !important; /* Smaller phone/address/email */
+        line-height: 1.1 !important; /* Tighter line height */
+    }
+    body.print-active #invoice-print-area .company-header h2 {
+        font-size: 1.1rem !important; /* Smaller main INVOICE title */
+        margin-top: 5px !important; /* Reduced margin */
+        margin-bottom: 3px !important; /* Reduced margin */
+    }
+
+    body.print-active #invoice-print-area .invoice-details-content .grid {
+        gap: 1px 6px !important; /* Even smaller gaps in customer details grid */
+        font-size: 0.65rem !important;
+        margin-bottom: 5px !important; /* Reduced margin */
+    }
+
+    body.print-active #invoice-print-area table {
+        border: 1px solid #e0e0e0; /* Add border to the entire table */
+    }
+    body.print-active #invoice-print-area table th,
+    body.print-active #invoice-print-area table td {
+        border: 1px solid #e0e0e0; /* Add borders to cells */
+        padding: 3px 5px !important; /* Further reduced padding for table cells */
+        font-size: 0.6rem !important; /* Even smaller font for table content */
+    }
+    body.print-active #invoice-print-area table th {
+        font-size: 0.55rem !important; /* Header slightly smaller */
+    }
+
+    body.print-active #invoice-print-area .flex-col.gap-1 {
+        gap: 0px !important; /* No gap for totals section */
+        padding: 5px !important; /* Smaller padding for totals section */
+        margin-top: 5px !important; /* Reduced margin */
+    }
+    body.print-active #invoice-print-area .flex-col.gap-1 span {
+        font-size: 0.7rem !important; /* Smaller font for totals text */
+    }
+    body.print-active #invoice-print-area .flex-col.gap-1 .text-lg {
+        font-size: 0.75rem !important; /* Smaller font for totals values */
+    }
+    body.print-active #invoice-print-area .flex-col.gap-1 .text-xl {
+        font-size: 0.85rem !important; /* Smaller font for grand total value */
+    }
+    body.print-active #invoice-print-area .flex-col.gap-1 .border-t {
+        border-width: 1px !important; /* Ensure border is thin */
+        margin-top: 5px !important; /* Reduced margin */
+        padding-top: 5px !important; /* Reduced padding */
+    }
+
+
+    body.print-active #invoice-print-area .bg-gray-100 { /* Bank details/footer containers */
+        padding: 5px !important; /* Reduced padding */
+        margin-top: 8px !important; /* Reduced margin */
+    }
+    body.print-active #invoice-print-area .bg-gray-100 h4 {
+        font-size: 0.7rem !important;
+        margin-bottom: 2px !important;
+    }
+    body.print-active #invoice-print-area .bg-gray-100 p {
+        font-size: 0.65rem !important;
+    }
+
+
+    /* Hide specific elements within the modal that should not print (e.g., buttons) */
+    .no-print, .hidden-for-print {
+        display: none !important;
+    }
+}
+
+
+/* Footer styling */
+footer {
+    width: 100%;
+    background-color: #1f2937;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    margin-top: auto; /* Pushes footer to the bottom */
+    flex-shrink: 0; /* Prevents footer from shrinking */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    .nav-links {
+        display: none; /* Hide desktop nav */
+    }
+    #mobile-menu-button {
+        display: block; /* Show mobile menu button */
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+    .content-container {
+        padding: 15px;
+    }
+    .btn {
+        width: 100%; /* Full width buttons on small screens */
+        font-size: 0.95rem;
+        padding: 10px 15px;
+    }
+    .flex-col.sm:flex-row {
+        flex-direction: column; /* Ensure vertical stack on small screens */
+    }
+    .modal-content {
+        max-width: 95vw;
+        margin: 10px;
+    }
+    /* Table responsive adjustments */
+    .overflow-x-auto {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    table {
+        min-width: 600px; /* Ensure table is wide enough to scroll if needed */
+    }
+    table th, table td {
+        padding: 8px 10px; /* Reduce padding for smaller screens */
+        font-size: 0.85rem;
+    }
+    #message-box {
+        width: 90%;
+        min-width: unset;
+    }
+    .form-group-input,
+    .form-group-select {
+        padding: 10px 12px;
+    }
+}
